@@ -1,7 +1,7 @@
 export const fetchItems = async (searchTerm: string) => {
     const url = searchTerm
-        ? `https://pokeapi.co/api/v2/pokemon?limit=10&offset=0&search=${searchTerm}`
-        : 'https://pokeapi.co/api/v2/pokemon?limit=10&offset=0';
+        ? `https://swapi.dev/api/people/?search=${encodeURIComponent(searchTerm)}`
+        : 'https://swapi.dev/api/people/';
 
     const response = await fetch(url);
     if (!response.ok) {
