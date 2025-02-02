@@ -1,25 +1,29 @@
-import React, { Component } from 'react';
+import { Component, ChangeEvent } from 'react';
 
-type State = {
+type HeaderProps = {
   searchTerm: string;
+  onSearch: (term: string) => void;
 };
 
-class Header extends Component<{}, State> {
-  constructor(props: {}) {
+type HeaderState = {
+  inputValue: string;
+};
+
+class Header extends Component<HeaderProps, HeaderState> {
+  constructor(props: HeaderProps) {
     super(props);
     this.state = {
-      searchTerm: localStorage.getItem('searchTerm') || '',
+      inputValue: props.searchTerm || '',
     };
   }
 
-  handleSearch = () => {
-    const { searchTerm } = this.state;
-    localStorage.setItem('searchTerm', searchTerm.trim());
-    window.location.reload();
+  handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    this.setState({ inputValue: e.target.value });
   };
 
-  handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({ searchTerm: e.target.value });
+  handleSearchClick = () => {
+    const trimmed = this.state.inputValue.trim();
+    this.props.onSearch(trimmed);
   };
 
   render() {
@@ -27,10 +31,13 @@ class Header extends Component<{}, State> {
       <div className="header">
         <input
           type="text"
-          value={this.state.searchTerm}
-          onChange={this.handleChange}
+          value={this.state.inputValue}
+          onChange={this.handleInputChange}
+          placeholder="Search Input Field"
         />
-        <button onClick={this.handleSearch} className='search-btn'>Search</button>
+        <button onClick={this.handleSearchClick} className='search-btn'>
+          Search Button
+        </button>
       </div>
     );
   }

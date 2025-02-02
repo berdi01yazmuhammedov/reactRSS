@@ -3,14 +3,18 @@ import { fetchItems } from './api';
 import CardList from './components/CardList';
 import Spinner from './components/Spinner';
 
-type State = {
+type FetchRenderProps = {
+  searchTerm: string;
+};
+
+type FetchRenderState = {
   items: any[];
   loading: boolean;
   error: string | null;
 };
 
-class FetchRender extends Component<{}, State> {
-  constructor(props: {}) {
+class FetchRender extends Component<FetchRenderProps, FetchRenderState> {
+  constructor(props: FetchRenderProps) {
     super(props);
     this.state = {
       items: [],
@@ -23,8 +27,14 @@ class FetchRender extends Component<{}, State> {
     this.fetchData();
   }
 
+  componentDidUpdate(prevProps: FetchRenderProps) {
+    if (prevProps.searchTerm !== this.props.searchTerm) {
+      this.fetchData();
+    }
+  }
+
   fetchData = async () => {
-    const searchTerm = localStorage.getItem('searchTerm') || '';
+    const { searchTerm } = this.props;
     try {
       this.setState({ loading: true, error: null });
       const items = await fetchItems(searchTerm);
@@ -34,27 +44,36 @@ class FetchRender extends Component<{}, State> {
     }
   };
 
+  throwError = () => {
+    throw new Error('Test error');
+  };
+
   render() {
-    const { items, loading, error} = this.state;
-   
+    const { items, loading, error } = this.state;
+    const { searchTerm } = this.props;
 
     return (
       <div className="results-section">
-          {loading ? (
-            <Spinner />
-          ) : error ? (
-            <div className="error">
-              {error}
-            </div>
-          ) : items.length === 0 ? (
-            <div className='no-results'>
-              No results found
-            </div>
-          ) : (
-            <CardList items={items} />
-          )}
+        {loading ? (
+          <Spinner />
+        ) : error ? (
+          <div className="error">
+            {error}
+          </div>
+        ) : items.length === 0 && searchTerm ? (
+          <div className='no-results'>
+            No results found for "{searchTerm}"
+          </div>
+        ) : (
+          <CardList items={items} />
+        )}
+        <div className="error-btn-container">
+          <button onClick={this.throwError} className='error-btn'>
+            Error Button
+          </button>
         </div>
-    )
+      </div>
+    );
   }
 }
 

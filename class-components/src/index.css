@@ -27,6 +27,9 @@ input{
   font-weight: bold;
   text-align: center;
 }
+.error-btn-container{
+  text-align: right;
+}
 .error-btn{
   padding: 5px 10px;
   background-color: #f44336;
