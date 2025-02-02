@@ -40,9 +40,12 @@ class FetchRender extends Component<FetchRenderProps, FetchRenderState> {
       const items = await fetchItems(searchTerm);
       this.setState({ items, loading: false });
     } catch (error) {
-      this.setState({ error: 'Failed to fetch data', loading: false });
+      const errorMessage =
+        error instanceof Error ? error.message : 'Failed to fetch data';
+      this.setState({ error: errorMessage, loading: false });
     }
   };
+
 
   throwError = () => {
     throw new Error('Test error');
