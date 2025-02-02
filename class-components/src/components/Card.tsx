@@ -7,8 +7,8 @@ type Props = {
 
 const Card: React.FC<Props> = ({ name, description }) => (
   <div className="card">
-    <h3>{name}</h3>
-    <p>{description}</p>
+    <div className='cell'>{name}</div>
+    <div className='cell'>{description}</div>
   </div>
 );
 

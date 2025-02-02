@@ -30,7 +30,7 @@ class Header extends Component<{}, State> {
           value={this.state.searchTerm}
           onChange={this.handleChange}
         />
-        <button onClick={this.handleSearch}>Search</button>
+        <button onClick={this.handleSearch} className='search-btn'>Search</button>
       </div>
     );
   }

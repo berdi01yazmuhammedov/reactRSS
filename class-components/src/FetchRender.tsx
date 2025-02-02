@@ -35,11 +35,26 @@ class FetchRender extends Component<{}, State> {
   };
 
   render() {
-    const { items, loading, error } = this.state;
-    if (loading) return <Spinner />;
-    if (error) return <div className="error">{error}</div>;
+    const { items, loading, error} = this.state;
+   
 
-    return <CardList items={items} />;
+    return (
+      <div className="results-section">
+          {loading ? (
+            <Spinner />
+          ) : error ? (
+            <div className="error">
+              {error}
+            </div>
+          ) : items.length === 0 ? (
+            <div className='no-results'>
+              No results found
+            </div>
+          ) : (
+            <CardList items={items} />
+          )}
+        </div>
+    )
   }
 }
 
