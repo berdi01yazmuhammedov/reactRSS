@@ -1,20 +1,20 @@
-// src/components/Header.tsx
 import React, { useState } from 'react';
 import { useStoredSearchTerm } from '../hooks/useStoredSearchTerm';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
 const Header: React.FC = () => {
-  const [searchTerm, setSearchTerm] = useStoredSearchTerm('searchTerm', '');
-  const [inputValue, setInputValue] = useState(searchTerm);
+  const [storedSearchTerm, setStoredSearchTerm] = useStoredSearchTerm('searchTerm', '');
+  const [inputValue, setInputValue] = useState(storedSearchTerm);
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setSearchTerm(inputValue);
-    searchParams.set('page', '1');
-    searchParams.delete('details');
-    navigate({ search: searchParams.toString() });
+    setStoredSearchTerm(inputValue);
+    const newParams = new URLSearchParams(searchParams.toString());
+    newParams.set('page', '1');
+    newParams.delete('details');
+    navigate({ search: newParams.toString() });
   };
 
   return (

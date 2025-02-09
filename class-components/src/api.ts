@@ -18,6 +18,10 @@ export interface GitHubUser {
 }
 
 export type Item = Repository | GitHubUser;
+const getAuthHeaders = () => ({
+  Authorization: `token ${import.meta.env.VITE_GITHUB_TOKEN}`,
+});
+
 export const fetchItems = async (
   searchTerm: string,
   page: number = 1
@@ -28,16 +32,21 @@ export const fetchItems = async (
     )}/repos?per_page=5&page=${page}`
     : `https://api.github.com/users?per_page=5&page=${page}`;
 
-  const response = await fetch(url);
+  const response = await fetch(url, {
+    headers: getAuthHeaders(),
+  });
   if (!response.ok) {
     throw new Error(`Error ${response.status}: ${response.statusText}`);
   }
   const data: Item[] = await response.json();
   return data;
 };
+
 export const fetchRepoDetails = async (repoId: number): Promise<Repository> => {
   const url = `https://api.github.com/repositories/${repoId}`;
-  const response = await fetch(url);
+  const response = await fetch(url, {
+    headers: getAuthHeaders(),
+  });
   if (!response.ok) {
     throw new Error(`Error ${response.status}: ${response.statusText}`);
   }
@@ -49,7 +58,9 @@ export const fetchUserDetails = async (
   login: string
 ): Promise<GitHubUser> => {
   const url = `https://api.github.com/users/${encodeURIComponent(login)}`;
-  const response = await fetch(url);
+  const response = await fetch(url, {
+    headers: getAuthHeaders(),
+  });
   if (!response.ok) {
     throw new Error(`Error ${response.status}: ${response.statusText}`);
   }

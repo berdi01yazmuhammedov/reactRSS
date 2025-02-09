@@ -40,23 +40,26 @@ const SearchPage: React.FC = () => {
   }, [fetchData]);
 
   const handlePageChange = (page: number) => {
-    searchParams.set('page', page.toString());
-    searchParams.delete('details');
-    setSearchParams(searchParams);
+    const newParams = new URLSearchParams(searchParams.toString());
+    newParams.set('page', page.toString());
+    newParams.delete('details');
+    setSearchParams(newParams);
   };
 
   const handleItemClick = (item: Item) => {
+    const newParams = new URLSearchParams(searchParams.toString());
     if ('name' in item) {
-      searchParams.set('details', item.id.toString());
+      newParams.set('details', item.id.toString());
     } else {
-      searchParams.set('details', item.login);
+      newParams.set('details', item.login);
     }
-    setSearchParams(searchParams);
+    setSearchParams(newParams);
   };
 
   const handleCloseDetails = () => {
-    searchParams.delete('details');
-    setSearchParams(searchParams);
+    const newParams = new URLSearchParams(searchParams.toString());
+    newParams.delete('details');
+    setSearchParams(newParams);
   };
 
   const handleLeftSectionClick = () => {
