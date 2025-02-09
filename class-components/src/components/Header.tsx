@@ -12,7 +12,6 @@ const Header: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setSearchTerm(inputValue);
-    // Reset page to 1 and remove any open details.
     searchParams.set('page', '1');
     searchParams.delete('details');
     navigate({ search: searchParams.toString() });
