@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import { fetchItems } from './api';
+import { fetchItems, Item } from './api';
 import CardList from './components/CardList';
 import Spinner from './components/Spinner';
 
@@ -8,7 +8,7 @@ type FetchRenderProps = {
 };
 
 type FetchRenderState = {
-  items: any[];
+  items: Item[];
   loading: boolean;
   error: string | null;
 };
