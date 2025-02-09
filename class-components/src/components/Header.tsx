@@ -1,46 +1,36 @@
-import { Component, ChangeEvent } from 'react';
+// src/components/Header.tsx
+import React, { useState } from 'react';
+import { useStoredSearchTerm } from '../hooks/useStoredSearchTerm';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
-type HeaderProps = {
-  searchTerm: string;
-  onSearch: (term: string) => void;
-};
+const Header: React.FC = () => {
+  const [searchTerm, setSearchTerm] = useStoredSearchTerm('searchTerm', '');
+  const [inputValue, setInputValue] = useState(searchTerm);
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
-type HeaderState = {
-  inputValue: string;
-};
-
-class Header extends Component<HeaderProps, HeaderState> {
-  constructor(props: HeaderProps) {
-    super(props);
-    this.state = {
-      inputValue: props.searchTerm || '',
-    };
-  }
-
-  handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    this.setState({ inputValue: e.target.value });
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setSearchTerm(inputValue);
+    // Reset page to 1 and remove any open details.
+    searchParams.set('page', '1');
+    searchParams.delete('details');
+    navigate({ search: searchParams.toString() });
   };
 
-  handleSearchClick = () => {
-    const trimmed = this.state.inputValue.trim();
-    this.props.onSearch(trimmed);
-  };
-
-  render() {
-    return (
-      <div className="header">
+  return (
+    <header className="header">
+      <form onSubmit={handleSubmit}>
         <input
           type="text"
-          value={this.state.inputValue}
-          onChange={this.handleInputChange}
-          placeholder="Search Input Field"
+          placeholder="Search GitHub username"
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
         />
-        <button onClick={this.handleSearchClick} className="search-btn">
-          Search Button
-        </button>
-      </div>
-    );
-  }
-}
+        <button type="submit">Search</button>
+      </form>
+    </header>
+  );
+};
 
 export default Header;
