@@ -70,26 +70,43 @@ const SearchPage: React.FC = () => {
 
   return (
     <div className="search-page" style={{ display: 'flex' }}>
-      <div className="left-section" style={{ flex: 1 }} onClick={handleLeftSectionClick}>
+      <div
+        className="left-section"
+        style={{ flex: 1 }}
+        onClick={handleLeftSectionClick}
+      >
         {loading ? (
           <Spinner />
         ) : error ? (
           <div className="error">{error}</div>
         ) : items.length === 0 && searchTerm ? (
-          <div className="no-results">No results found for "{searchTerm}"</div>
+          <div className="no-results">
+            No results found for &quot;{searchTerm}&quot;
+          </div>
         ) : (
           <>
             <CardList items={items} onItemClick={handleItemClick} />
-            <Pagination currentPage={currentPage} onPageChange={handlePageChange} />
+            <Pagination
+              currentPage={currentPage}
+              onPageChange={handlePageChange}
+            />
           </>
         )}
       </div>
       {detailsParam && (
         <div
           className="right-section"
-          style={{ width: '40%', borderLeft: '1px solid #ccc', padding: '1rem' }}
+          style={{
+            width: '40%',
+            borderLeft: '1px solid #ccc',
+            padding: '1rem',
+          }}
         >
-          <Details searchTerm={searchTerm} detailsParam={detailsParam} onClose={handleCloseDetails} />
+          <Details
+            searchTerm={searchTerm}
+            detailsParam={detailsParam}
+            onClose={handleCloseDetails}
+          />
         </div>
       )}
     </div>

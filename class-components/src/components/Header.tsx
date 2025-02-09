@@ -3,7 +3,10 @@ import { useStoredSearchTerm } from '../hooks/useStoredSearchTerm';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
 const Header: React.FC = () => {
-  const [storedSearchTerm, setStoredSearchTerm] = useStoredSearchTerm('searchTerm', '');
+  const [storedSearchTerm, setStoredSearchTerm] = useStoredSearchTerm(
+    'searchTerm',
+    ''
+  );
   const [inputValue, setInputValue] = useState(storedSearchTerm);
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();

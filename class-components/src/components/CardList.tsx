@@ -11,7 +11,7 @@ const CardList: React.FC<CardListProps> = ({ items, onItemClick }) => {
     <div className="card-list">
       {items.map((item) => (
         <div key={item.id} className="card" onClick={() => onItemClick(item)}>
-          {"login" in item ? (
+          {'login' in item ? (
             <>
               <img src={item.avatar_url} alt={item.login} width="50" />
               <div>{item.login}</div>

@@ -28,8 +28,8 @@ export const fetchItems = async (
 ): Promise<Item[]> => {
   const url = searchTerm
     ? `https://api.github.com/users/${encodeURIComponent(
-      searchTerm
-    )}/repos?per_page=5&page=${page}`
+        searchTerm
+      )}/repos?per_page=5&page=${page}`
     : `https://api.github.com/users?per_page=5&page=${page}`;
 
   const response = await fetch(url, {
@@ -54,9 +54,7 @@ export const fetchRepoDetails = async (repoId: number): Promise<Repository> => {
   return data;
 };
 
-export const fetchUserDetails = async (
-  login: string
-): Promise<GitHubUser> => {
+export const fetchUserDetails = async (login: string): Promise<GitHubUser> => {
   const url = `https://api.github.com/users/${encodeURIComponent(login)}`;
   const response = await fetch(url, {
     headers: getAuthHeaders(),
