@@ -1,61 +1,73 @@
-import { Component } from 'react';
-import { fetchItems, Item } from './api';
-import CardList from './components/CardList';
-import Spinner from './components/Spinner';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import { fetchItems, Item } from '../api';
+import CardList from '../components/CardList';
+import Pagination from '../components/Pagination';
+import Spinner from '../components/Spinner';
+import { useStoredSearchTerm } from '../hooks/useStoredSearchTerm';
+import Details from './Details';
 
-type FetchRenderProps = {
-  searchTerm: string;
-};
+const SearchPage: React.FC = () => {
+  const [storedSearchTerm] = useStoredSearchTerm('searchTerm', '');
+  const searchTerm = storedSearchTerm;
 
-type FetchRenderState = {
-  items: Item[];
-  loading: boolean;
-  error: string | null;
-};
+  const [items, setItems] = useState<Item[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
-class FetchRender extends Component<FetchRenderProps, FetchRenderState> {
-  constructor(props: FetchRenderProps) {
-    super(props);
-    this.state = {
-      items: [],
-      loading: true,
-      error: null,
-    };
-  }
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  componentDidMount() {
-    this.fetchData();
-  }
+  const pageParam = searchParams.get('page');
+  const currentPage = pageParam ? parseInt(pageParam, 10) : 1;
 
-  componentDidUpdate(prevProps: FetchRenderProps) {
-    if (prevProps.searchTerm !== this.props.searchTerm) {
-      this.fetchData();
-    }
-  }
+  const detailsParam = searchParams.get('details');
 
-  fetchData = async () => {
-    const { searchTerm } = this.props;
+  const fetchData = useCallback(async () => {
+    setLoading(true);
+    setError(null);
     try {
-      this.setState({ loading: true, error: null });
-      const items = await fetchItems(searchTerm);
-      this.setState({ items, loading: false });
-    } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : 'Failed to fetch data';
-      this.setState({ error: errorMessage, loading: false });
+      const data = await fetchItems(searchTerm, currentPage);
+      setItems(data);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Error fetching data');
+    } finally {
+      setLoading(false);
+    }
+  }, [searchTerm, currentPage]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
+  const handlePageChange = (page: number) => {
+    searchParams.set('page', page.toString());
+    searchParams.delete('details');
+    setSearchParams(searchParams);
+  };
+
+  const handleItemClick = (item: Item) => {
+    if ('name' in item) {
+      searchParams.set('details', item.id.toString());
+    } else {
+      searchParams.set('details', item.login);
+    }
+    setSearchParams(searchParams);
+  };
+
+  const handleCloseDetails = () => {
+    searchParams.delete('details');
+    setSearchParams(searchParams);
+  };
+
+  const handleLeftSectionClick = () => {
+    if (detailsParam) {
+      handleCloseDetails();
     }
   };
 
-  throwError = () => {
-    throw new Error('Test error');
-  };
-
-  render() {
-    const { items, loading, error } = this.state;
-    const { searchTerm } = this.props;
-
-    return (
-      <div className="results-section">
+  return (
+    <div className="search-page" style={{ display: 'flex' }}>
+      <div className="left-section" style={{ flex: 1 }} onClick={handleLeftSectionClick}>
         {loading ? (
           <Spinner />
         ) : error ? (
@@ -63,16 +75,22 @@ class FetchRender extends Component<FetchRenderProps, FetchRenderState> {
         ) : items.length === 0 && searchTerm ? (
           <div className="no-results">No results found for "{searchTerm}"</div>
         ) : (
-          <CardList items={items} />
+          <>
+            <CardList items={items} onItemClick={handleItemClick} />
+            <Pagination currentPage={currentPage} onPageChange={handlePageChange} />
+          </>
         )}
-        <div className="error-btn-container">
-          <button onClick={this.throwError} className="error-btn">
-            Error Button
-          </button>
-        </div>
       </div>
-    );
-  }
-}
+      {detailsParam && (
+        <div
+          className="right-section"
+          style={{ width: '40%', borderLeft: '1px solid #ccc', padding: '1rem' }}
+        >
+          <Details searchTerm={searchTerm} detailsParam={detailsParam} onClose={handleCloseDetails} />
+        </div>
+      )}
+    </div>
+  );
+};
 
-export default FetchRender;
+export default SearchPage;
