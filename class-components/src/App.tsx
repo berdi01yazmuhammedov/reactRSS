@@ -1,36 +1,22 @@
-import { Component } from 'react';
+import React from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import SearchPage from './pages/SearchPage';
+import NotFound from './pages/NotFound';
 import Header from './components/Header';
-import FetchRender from './FetchRender';
 import ErrorBoundary from './components/ErrorBoundary';
 
-type AppState = {
-  searchTerm: string;
-};
-
-class App extends Component<{}, AppState> {
-  constructor(props: {}) {
-    super(props);
-    this.state = {
-      searchTerm: localStorage.getItem('searchTerm') || '',
-    };
-  }
-
-  updateSearchTerm = (term: string) => {
-    localStorage.setItem('searchTerm', term);
-    this.setState({ searchTerm: term });
-  };
-
-  render() {
-    const { searchTerm } = this.state;
-    return (
+const App: React.FC = () => {
+  return (
+    <BrowserRouter>
       <ErrorBoundary>
-        <div className="app">
-          <Header searchTerm={searchTerm} onSearch={this.updateSearchTerm} />
-          <FetchRender searchTerm={searchTerm} />
-        </div>
+        <Header />
+        <Routes>
+          <Route path="/" element={<SearchPage />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
       </ErrorBoundary>
-    );
-  }
-}
+    </BrowserRouter>
+  );
+};
 
 export default App;
