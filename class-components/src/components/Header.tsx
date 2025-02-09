@@ -35,7 +35,7 @@ class Header extends Component<HeaderProps, HeaderState> {
           onChange={this.handleInputChange}
           placeholder="Search Input Field"
         />
-        <button onClick={this.handleSearchClick} className='search-btn'>
+        <button onClick={this.handleSearchClick} className="search-btn">
           Search Button
         </button>
       </div>

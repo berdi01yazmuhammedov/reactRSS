@@ -46,7 +46,6 @@ class FetchRender extends Component<FetchRenderProps, FetchRenderState> {
     }
   };
 
-
   throwError = () => {
     throw new Error('Test error');
   };
@@ -60,18 +59,14 @@ class FetchRender extends Component<FetchRenderProps, FetchRenderState> {
         {loading ? (
           <Spinner />
         ) : error ? (
-          <div className="error">
-            {error}
-          </div>
+          <div className="error">{error}</div>
         ) : items.length === 0 && searchTerm ? (
-          <div className='no-results'>
-            No results found for "{searchTerm}"
-          </div>
+          <div className="no-results">No results found for "{searchTerm}"</div>
         ) : (
           <CardList items={items} />
         )}
         <div className="error-btn-container">
-          <button onClick={this.throwError} className='error-btn'>
+          <button onClick={this.throwError} className="error-btn">
             Error Button
           </button>
         </div>

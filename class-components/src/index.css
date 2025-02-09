@@ -1,7 +1,7 @@
-body{
-  font-family: "monospace";
+body {
+  font-family: 'monospace';
 }
-.app{
+.app {
   max-width: 600px;
   padding-top: 50px;
   margin: 0 auto;
@@ -14,37 +14,36 @@ body{
   display: flex;
   justify-content: space-between;
 }
-input{
+input {
   padding: 5px;
   margin-right: 10px;
-
 }
-.search-btn{
+.search-btn {
   padding: 5px 10px;
   cursor: pointer;
 }
-.results-section{
+.results-section {
   border: 1px solid #999;
   padding: 10px;
   margin-bottom: 20px;
   min-height: 150px;
 }
-.error{
+.error {
   color: red;
   font-weight: bold;
   text-align: center;
 }
-.error-btn-container{
+.error-btn-container {
   text-align: right;
 }
-.error-btn{
+.error-btn {
   padding: 5px 10px;
   background-color: #f44336;
   color: #fff;
   border: none;
   cursor: pointer;
 }
-.no-results{
+.no-results {
   text-align: center;
   font-style: italic;
   color: #555;
@@ -78,19 +77,19 @@ input{
   align-items: center;
   z-index: 1000;
   .spinner {
-      border: 8px solid rgba(0, 0, 0, 0.1);
-      border-top: 8px solid orange;
-      border-radius: 50%;
-      width: 60px;
-      height: 60px;
-      animation: spin 1s linear infinite;
+    border: 8px solid rgba(0, 0, 0, 0.1);
+    border-top: 8px solid orange;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 1s linear infinite;
   }
 }
 @keyframes spin {
   0% {
-      transform: rotate(0deg);
+    transform: rotate(0deg);
   }
   100% {
-      transform: rotate(360deg);
+    transform: rotate(360deg);
   }
 }
